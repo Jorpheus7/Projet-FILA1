@@ -64,9 +64,11 @@
 							<!-- Section where the menu items will be generated  -->
 							<ul id="items">
 								<!-- Auto-generated items comes here -->
+								
+								<li id="insertItemTag"></li>
 							</ul>
 							<ul>
-								<li><a href="#top" id="addMetric"  onclick="addMetric();" class="skel-panels-ignoreHref"><span class="fa fa-plus-circle"></span>Add Metric</a></li>
+								<li><a href="#"  class="skel-panels-ignoreHref" id="addMetric"  onclick="addMetric();"><span class="fa fa-plus-circle"></span>Add Metric</a></li>
 							</ul>
 						</nav>
 						
@@ -82,8 +84,13 @@
 					</section>
 					
 					<form id="metricsForm" method="post" action="#">
+						<input type="hidden" id="metricIds" value=""/>
+						<div id="metrics">
 						<!-- Auto-generated sections -->
 						
+							<div id="insertTag"></div>
+						</div>
+						<div align="right"><input class="submitButton" type="submit" value="Validate"/></div>
 					</form>
 					
 		<!-- Footer -->
