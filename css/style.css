@@ -317,6 +317,7 @@
 			form select,
 			form textarea
 			{
+				margin-top: 20px;
 				position: relative;
 				-webkit-appearance: none;
 				display: block;
@@ -495,6 +496,7 @@
 	.fa
 	{
 		text-decoration: none;
+		margin: 20px;
 	}
 
 		.fa.solo
