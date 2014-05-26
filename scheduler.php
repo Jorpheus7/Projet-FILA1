@@ -16,7 +16,7 @@
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
-		<script src="js/manageMetricsHTMLForm.js"></script>
+		<script src="js/manageSchedulersHTMLForm.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -26,6 +26,30 @@
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
 	</head>
 	<body onload='init();'">
+
+	<?php
+		// Getting the IDs of the metrics from the hidden field
+		$metricIdsField = $_POST['metricIds'];
+		$metricIds = explode(";", $metricIdsField, -1);
+
+		$tempHidden = "";
+
+		// Getting info from every metric
+		foreach($metricIds as $id){
+			$metricName = $_POST[$id.'_Name'];
+			$metricDescription = $_POST[$id.'_Description'];
+			$metricUnit = $_POST[$id.'_Unit'];
+
+			// TODO Remplacer ce mécanisme par de l'AJAX ou autre...
+			$tempHidden = $tempHidden 
+				. $id . ";"
+				. $metricName . ";"
+				. $metricDescription . ";"
+				. $metricUnit . "::";
+		}
+		echo "<input type=\"hidden\" id=\"hiddenMetrics\" value=\"".$tempHidden."\" />";
+		
+	?>
 
 		<!-- Header -->
 			<div id="header" class="skel-panels-fixed">
@@ -43,8 +67,8 @@
 					<!-- Nav -->
 						<nav id="navUp">
 							<ul class="container">
-								<li class="actualPage">Metrics</li>
-								<li>Scheduler</li>
+								<li>Metrics</li>
+								<li class="actualPage">Scheduler</li>
 								<li>Contract</li>
 							</ul>
 						</nav>
@@ -68,7 +92,8 @@
 								<li id="insertItemTag"></li>
 							</ul>
 							<ul>
-								<li><a href="#"  class="skel-panels-ignoreHref" id="addMetric"  onclick="addMetric();"><span class="fa fa-plus-circle"></span>Add Metric</a></li>
+								<li><a href="#"  class="skel-panels-ignoreHref" id="addSchedulerRequest"  onclick="addScheduler('request');"><span class="fa fa-plus-circle"></span>Add by Request</a></li>
+								<li><a href="#"  class="skel-panels-ignoreHref" id="addSchedulerInterval"  onclick="addScheduler('interval');"><span class="fa fa-plus-circle"></span>Add by Interval</a></li>
 							</ul>
 						</nav>
 						
@@ -80,13 +105,13 @@
 			<div id="main">
 			
 					<section id="top" class="one">
-						<h2 class="title">Metrics</h2>
+						<h2 class="title">Schedulers</h2>
 					</section>
 					
-					<form id="metricsForm" method="post" action="#">
+					<form id="schedulersForm" method="post" action="contract.php">
 						<!-- Hidden field containing the IDs of the actuals metrics -->
-						<input type="hidden" id="metricIds" value=""/>
-						<div id="metrics">
+						<input type="hidden" id="schedulersIds" value=""/>
+						<div id="schedulers">
 						<!-- Auto-generated sections -->
 						
 							<div id="insertTag"></div>

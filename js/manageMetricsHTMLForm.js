@@ -128,5 +128,6 @@ function renameMetric(metricId){
 	// Remove the item in the left menu
 	var itemName = document.getElementById(metricId+'_ItemName');
 	itemName.innerHTML = document.getElementById(metricId+'_Name').value;
-	
+
+		// TODO Si le nom est déjà celui d'une autre metric, vider le champ et Try Again
 }
