@@ -132,6 +132,13 @@ function addScheduler(mode){
 	for(i = 0; i < metrics.length; i++) {
 
 		var div = document.createElement("div");
+		var checkbox = document.createElement("input");
+		checkbox.setAttribute("type", "checkbox");
+		checkbox.setAttribute("id", 'S' + numId +'_'+metrics[i]['id']+'_Checkbox');
+		checkbox.setAttribute("name", 'S' + numId +'_'+metrics[i]['id']+'_Checkbox');
+		checkbox.setAttribute("onClick", 'enableOrDisableMetric("S' + numId +'_'+ metrics[i]['id'] + '")');
+		div.appendChild(checkbox);
+
 		var metricName = document.createElement("strong");
 		metricName.innerHTML = metrics[i]['name']+" ("+metrics[i]['description']+") : ";
 		div.appendChild(metricName);
@@ -211,6 +218,21 @@ function renameScheduler(schedulerId){
 	itemName.innerHTML = document.getElementById(schedulerId+'_Name').value;
 	
 	// TODO Si le nom est déjà celui d'un autre scheduler, vider le champ et Try Again
+}
+
+function enableOrDisableMetric(id){
+	// Getting the corresponding checkbox
+	var checkbox = document.getElementById(id +'_Checkbox');
+	// Enable or disable fields
+	if(checkbox.checked == true){
+		document.getElementById(id +'_Fuzziness').disabled = true;
+		document.getElementById(id +'_PercentageConfidence').disabled = true;
+		document.getElementById(id +'_PercentageFuzziness').disabled = true;
+	}else{
+		document.getElementById(id +'_Fuzziness').disabled = false;
+		document.getElementById(id +'_PercentageConfidence').disabled = false;
+		document.getElementById(id +'_PercentageFuzziness').disabled = false;
+	}
 }
 
 /**
