@@ -53,15 +53,15 @@ function addMetric(){
 	section.appendChild(div1);
 	
 	var div2 = document.createElement("div");
-	div2.setAttribute("class", '6u');
+	div2.setAttribute("class", '4u');
 	div1.appendChild(div2);
 	
 	var div3 = document.createElement("div");
-	div3.setAttribute("class", '6u');
+	div3.setAttribute("class", '4u');
 	div1.appendChild(div3);
 	
 	var div4 = document.createElement("div");
-	div4.setAttribute("class", '6u');
+	div4.setAttribute("class", '4u');
 	div1.appendChild(div4);
 	
 	var name = document.createElement("input");
@@ -84,15 +84,38 @@ function addMetric(){
 	description.setAttribute("required", 'required');
 	div3.appendChild(description);	
 			
-	var unit = document.createElement("input");
+	var unit = document.createElement("select");
 	unit.setAttribute("type", 'text');
 	unit.setAttribute("class", 'text');
 	unit.setAttribute("id", 'M' + numId +'_Unit');
 	unit.setAttribute("name", 'M' + numId +'_Unit');
-	unit.setAttribute("placeholder", 'Unit');
 	unit.setAttribute("required", 'required');
+	var time = document.createElement("optgroup") ;
+	time.setAttribute("label", "Time") ;
+	var second = document.createElement("option") ;
+	second.setAttribute("value", 'second') ;
+	second.text = 'second' ;
+	var minute = document.createElement("option") ;
+	minute.setAttribute("value", 'minute') ;
+	minute.text = 'minute' ;
+	time.appendChild(second) ;
+	time.appendChild(minute) ;
+	unit.appendChild(time);
+	var other = document.createElement("optgroup") ;
+	other.setAttribute("label", "Other unit") ;
+	var percentage = document.createElement("option") ;
+	percentage.setAttribute("value", 'percentage') ;
+	percentage.text = 'percentage' ;
+	var noUnit = document.createElement("option") ;
+	noUnit.setAttribute("value", 'no unit') ;
+	noUnit.setAttribute("selected", 'selected') ;
+	noUnit.text = 'no unit' ;
+	other.appendChild(percentage) ;
+	other.appendChild(noUnit) ;
+	unit.appendChild(other);
+	unit.setAttribute("placeholder", 'no unit');
 	div4.appendChild(unit);	
-			
+
 	metricsForm.insertBefore(section, document.getElementById("insertTag"));
 	
 	

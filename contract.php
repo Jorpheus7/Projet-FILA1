@@ -83,16 +83,20 @@
 						$metricObjectArray = array();
 
 						$metricHiddenField = $_POST['hiddenMetrics'];
+						echo '<script>alert(\''.$metricHiddenField.'\');</script>';
 						$metricsArray = explode("::", $metricHiddenField, -1);
-						foreach($metricsArray as $num => $metricString){
+						foreach($metricsArray as /*$num =>*/ $metricString){
 							$metricData = explode(";", $metricString, -1);
-							$metrics[$num] = array(
+							/*$metrics[$num] = array(
 								'id' => $metricData[0],
 								'name' => $metricData[1],
 								'description' => $metricData[2],
 								'unit' => $metricData[3]
-							);
-							$metricObjectArray[] = new Metric($metrics[$num]['name'], $metrics[$num]['description'], $metrics[$num]['unit'], "") ;
+							);*/
+							//$metricObjectArray[$num] = new Metric($metrics[$num]['name'], $metrics[$num]['description'], $metrics[$num]['unit'], "") ;
+							$metric = new Metric($metricData[1], $metricData[2], $metricData[3], "") ;
+							$metricObjectArray[] = $metric;
+							echo '<p>'.$metric->toString().'</p>';
 						}
 
 						// Getting the IDs of the schedulers from the hidden field
@@ -103,9 +107,9 @@
 
 						// Getting info from every scheduler
 						foreach($schedulersIds as $id){
-							$schedulerObjectArray[] = new Schedule($id, $_POST[$id.'_Start'], $_POST[$id.'_End'], "every day") ;
+							$schedule = new Schedule($id, $_POST[$id.'_Start'], $_POST[$id.'_End'], "every day") ;
+							$schedulerObjectArray[] = $schedule;
 						}
-
 
 						$mon = new Monitoring("Mon1", "average", "60") ;
 						$met1 = new Metric("Rt", "Response Time", "second", "") ;

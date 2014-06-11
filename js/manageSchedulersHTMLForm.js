@@ -135,6 +135,7 @@ function addScheduler(mode){
 		var checkbox = document.createElement("input");
 		checkbox.setAttribute("type", "checkbox");
 		checkbox.setAttribute("id", 'S' + numId +'_'+metrics[i]['id']+'_Checkbox');
+		checkbox.setAttribute("checked", 'true');
 		checkbox.setAttribute("name", 'S' + numId +'_'+metrics[i]['id']+'_Checkbox');
 		checkbox.setAttribute("onClick", 'enableOrDisableMetric("S' + numId +'_'+ metrics[i]['id'] + '")');
 		div.appendChild(checkbox);
@@ -185,8 +186,8 @@ function addScheduler(mode){
 	
 	
 	// Adding the new ID in the hidden field
-	var metricsId = document.getElementById("schedulersIds");
-	metricsId.value = metricsId.value+'S' + numId +';';
+	var schedulersId = document.getElementById("schedulersIds");
+	schedulersId.value = schedulersId.value+'S' + numId +';';
 	
 }
 
@@ -224,7 +225,7 @@ function enableOrDisableMetric(id){
 	// Getting the corresponding checkbox
 	var checkbox = document.getElementById(id +'_Checkbox');
 	// Enable or disable fields
-	if(checkbox.checked == true){
+	if(checkbox.checked == false){
 		document.getElementById(id +'_Fuzziness').disabled = true;
 		document.getElementById(id +'_PercentageConfidence').disabled = true;
 		document.getElementById(id +'_PercentageFuzziness').disabled = true;
