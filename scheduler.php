@@ -47,7 +47,6 @@
 				. $metricDescription . ";"
 				. $metricUnit . "::";
 		}
-		echo "<input type=\"hidden\" id=\"hiddenMetrics\" value=\"".$tempHidden."\" />";
 		
 	?>
 
@@ -110,7 +109,8 @@
 					
 					<form id="schedulersForm" method="post" action="contract.php">
 						<!-- Hidden field containing the IDs of the actuals metrics -->
-						<input type="hidden" id="schedulersIds" value=""/>
+						<?php echo "<input type=\"hidden\" id=\"hiddenMetrics\" name=\"hiddenMetrics\" value=\"".$tempHidden."\" />"; ?>
+						<input type="hidden" id="schedulersIds" name="schedulersIds" value=""/>
 						<div id="schedulers">
 						<!-- Auto-generated sections -->
 						

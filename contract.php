@@ -83,20 +83,19 @@
 						$metricObjectArray = array();
 
 						$metricHiddenField = $_POST['hiddenMetrics'];
-						echo '<script>alert(\''.$metricHiddenField.'\');</script>';
+						print_r (/*'<script>alert(\''.*/$_POST/*.'\');</script>'*/);
 						$metricsArray = explode("::", $metricHiddenField, -1);
-						foreach($metricsArray as /*$num =>*/ $metricString){
+						foreach($metricsArray as $metricString){
 							$metricData = explode(";", $metricString, -1);
-							/*$metrics[$num] = array(
+							$metrics[] = array(
 								'id' => $metricData[0],
 								'name' => $metricData[1],
 								'description' => $metricData[2],
 								'unit' => $metricData[3]
-							);*/
-							//$metricObjectArray[$num] = new Metric($metrics[$num]['name'], $metrics[$num]['description'], $metrics[$num]['unit'], "") ;
-							$metric = new Metric($metricData[1], $metricData[2], $metricData[3], "") ;
+							);
+							$metric = new Metric($metricData[0], $metricData[1], $metricData[3], "") ;
+							// TODO Ajouter la description
 							$metricObjectArray[] = $metric;
-							echo '<p>'.$metric->toString().'</p>';
 						}
 
 						// Getting the IDs of the schedulers from the hidden field
@@ -104,26 +103,51 @@
 						$schedulersIds = explode(";", $schedulersIdsField, -1);
 
 						$schedulerObjectArray = array();
+						$guaranteeObjectArray = array();
 
 						// Getting info from every scheduler
 						foreach($schedulersIds as $id){
-							$schedule = new Schedule($id, $_POST[$id.'_Start'], $_POST[$id.'_End'], "every day") ;
+							$schedulerType = $_POST[$id.'_Type'];
+							$stringCron = "";
+							$arrayCron = $_POST[$id.'_Cron'];
+							$numberOfDays = count($arrayCron);
+							if($numberOfDays == 7){
+								$stringCron = "every day";
+							}else{
+								for($i = 0; $i < $numberOfDays; $i++){
+									$stringCron = $stringCron . $arrayCron[$i] . " ";
+								}
+							}
+							$schedule = new Schedule($id, $_POST[$id.'_Start'], $_POST[$id.'_End'], $stringCron) ;
 							$schedulerObjectArray[] = $schedule;
+							foreach($metrics as $oneMetric){
+								// If the checkbox is checked
+								if($_POST[$id.'_'.$oneMetric['id'].'_Checkbox']){
+									// Create the Objective from the form
+									$objective = new Objective($schedulerType, 
+										$oneMetric['id'], 
+										$_POST[$id.'_'.$oneMetric['id'].'_Comparator'], 
+										$_POST[$id.'_'.$oneMetric['id'].'_Treshold'], 
+										$id, 
+										"Mon1", 
+										$_POST[$id.'_'.$oneMetric['id'].'_PercentageConfidence'], 
+										$_POST[$id.'_'.$oneMetric['id'].'_Fuzziness'], 
+										$_POST[$id.'_'.$oneMetric['id'].'_PercentageFuzziness'],
+										"1800") ;
+
+									// Penalties hardcoded for now
+									$con = new Constant("0.1", "euro/request") ;
+									$penalty = new Penalty("P1", "violation", "provider", $con) ;
+
+									$guaranteeObjectArray[] = new Guarantee("G1", "provider", "1", $objective, $penalty) ;
+								}
+							}
 						}
 
 						$mon = new Monitoring("Mon1", "average", "60") ;
-						$met1 = new Metric("Rt", "Response Time", "second", "") ;
-						$met2 = new Metric("Av", "Availability", "percentage", "30") ;
 						$par = new Parameters($metricObjectArray, Array($mon), $schedulerObjectArray) ;
-						$obj1 = new Objective("per-interval", "Rt", "lessOrEqual", "3", "Sch1", "Mon1", "90", "0.5", "10", "1800") ;
-						$con1 = new Constant("0.1", "euro/request") ;
-						$pen1 = new Penalty("P1", "violation", "provider", $con1) ;
-						$gua1 = new Guarantee("G1", "provider", "1", $obj1, $pen1) ;
-						$obj2 = new Objective("per-interval", "Av", "greaterOrEqual", "95", "Sch1", "Mon1", "90", "1", "10", "1800") ;
 						$con2 = new Constant("0.1", "euro/interval") ;
-						$pen2 = new Penalty("P2", "violation", "provider", $con2) ;
-						$gua2 = new Guarantee("G2", "provider", "2", $obj2, $pen2) ;
-						$all = new All(Array($gua1,$gua2)) ;
+						$all = new All($guaranteeObjectArray) ;
 						$guas = new Guarantees($all) ;
 						$tem = new Template("gold", "1.0", $par, $guas) ;
 						$val = new Validity("2014", "2015") ;
@@ -135,10 +159,6 @@
 						fclose($file) ;
 
 						echo '<p align="center"><a href="./contracts/'.$filename.'.xml">Contrat XML</a></p>';
-
-						//echo $csla->toString();
-						
-
 
 					?>
 

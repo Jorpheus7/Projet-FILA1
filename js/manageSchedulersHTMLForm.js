@@ -50,6 +50,13 @@ function addScheduler(mode){
 	section.setAttribute("id", 'S' + numId +'_Section');
 	section.setAttribute("class", 'schedulerSection');
 
+	var type = document.createElement("input");
+	type.setAttribute("id", 'S' + numId +'_Type');
+	type.setAttribute("name", 'S' + numId +'_Type');
+	type.setAttribute("type", "hidden");
+	type.setAttribute("value", "per-request");
+	section.appendChild(type);
+
 	var start = document.createElement("input");
 	start.setAttribute("id", 'S' + numId +'_Start');
 	start.setAttribute("name", 'S' + numId +'_Start');
@@ -81,41 +88,41 @@ function addScheduler(mode){
 
 	var select = document.createElement("select");
 	select.setAttribute("id", 'S' + numId +'_Cron');
-	select.setAttribute("name", 'S' + numId +'_Cron');
+	select.setAttribute("name", 'S' + numId +'_Cron[]');
 	select.setAttribute("multiple", "multiple");
 
 	var option1 = document.createElement("option");
-	option1.setAttribute("value", "1");
+	option1.setAttribute("value", "monday");
 	option1.innerHTML = "Monday";
 	select.appendChild(option1);
 
 	var option2 = document.createElement("option");
-	option2.setAttribute("value", "2");
+	option2.setAttribute("value", "tuesday");
 	option2.innerHTML = "Tuesday";
 	select.appendChild(option2);
 
 	var option3 = document.createElement("option");
-	option3.setAttribute("value", "3");
+	option3.setAttribute("value", "wednesday");
 	option3.innerHTML = "Wednesday";
 	select.appendChild(option3);
 
 	var option4 = document.createElement("option");
-	option4.setAttribute("value", "4");
+	option4.setAttribute("value", "thursday");
 	option4.innerHTML = "Thursday";
 	select.appendChild(option4);
 
 	var option5 = document.createElement("option");
-	option5.setAttribute("value", "5");
+	option5.setAttribute("value", "friday");
 	option5.innerHTML = "Friday";
 	select.appendChild(option5);
 
 	var option6 = document.createElement("option");
-	option6.setAttribute("value", "6");
+	option6.setAttribute("value", "saturday");
 	option6.innerHTML = "Saturday";
 	select.appendChild(option6);
 
 	var option7 = document.createElement("option");
-	option7.setAttribute("value", "7");
+	option7.setAttribute("value", "sunday");
 	option7.innerHTML = "Sunday";
 	select.appendChild(option7);
 
@@ -144,6 +151,44 @@ function addScheduler(mode){
 		metricName.innerHTML = metrics[i]['name']+" ("+metrics[i]['description']+") : ";
 		div.appendChild(metricName);
 		div.appendChild(document.createElement("br"));
+
+		var comparator = document.createElement("select");
+		comparator.setAttribute("id", 'S' + numId + '_' + metrics[i]['id'] + '_Comparator');
+		comparator.setAttribute("name", 'S' + numId + '_' + metrics[i]['id'] + '_Comparator');
+
+		var greater = document.createElement("option");
+		greater.setAttribute("value", "greater");
+		greater.innerHTML = "Greater than";
+		comparator.appendChild(greater);
+
+		var greaterOrEqual = document.createElement("option");
+		greaterOrEqual.setAttribute("value", "greaterOrEqual");
+		greaterOrEqual.innerHTML = "Greater or equal";
+		comparator.appendChild(greaterOrEqual);
+
+		var less = document.createElement("option");
+		less.setAttribute("value", "less");
+		less.innerHTML = "Less than";
+		comparator.appendChild(less);
+
+		var lessOrEqual = document.createElement("option");
+		lessOrEqual.setAttribute("value", "lessOrEqual");
+		lessOrEqual.innerHTML = "Less or equal";
+		comparator.appendChild(lessOrEqual);
+
+		var equals = document.createElement("option");
+		equals.setAttribute("value", "equals");
+		equals.innerHTML = "Equals";
+		comparator.appendChild(equals);
+
+		div.appendChild(comparator);
+
+		var treshold = document.createElement("input");
+		treshold.setAttribute("type", "text");
+		treshold.setAttribute("id", 'S' + numId +'_'+metrics[i]['id']+'_Treshold');
+		treshold.setAttribute("name", 'S' + numId +'_'+metrics[i]['id']+'_Treshold');
+		treshold.setAttribute("required", 'required');
+		div.appendChild(treshold);
 
 		var fuzzinessLabel = document.createTextNode("fuzziness : ");
 		div.appendChild(fuzzinessLabel);
@@ -229,10 +274,14 @@ function enableOrDisableMetric(id){
 		document.getElementById(id +'_Fuzziness').disabled = true;
 		document.getElementById(id +'_PercentageConfidence').disabled = true;
 		document.getElementById(id +'_PercentageFuzziness').disabled = true;
+		document.getElementById(id +'_Comparator').disabled = true;
+		document.getElementById(id +'_Treshold').disabled = true;
 	}else{
 		document.getElementById(id +'_Fuzziness').disabled = false;
 		document.getElementById(id +'_PercentageConfidence').disabled = false;
 		document.getElementById(id +'_PercentageFuzziness').disabled = false;
+		document.getElementById(id +'_Comparator').disabled = false;
+		document.getElementById(id +'_Treshold').disabled = false;
 	}
 }
 

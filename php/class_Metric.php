@@ -48,7 +48,7 @@
 			if ($this->interval = "") {
 				$content .= " frequency=\"".$this->frequency."\"" ;
 			}
-			$content .= "/>\n" ;			
+			$content .= ">\n" ;			
 			return $content ;
 		}
 		
